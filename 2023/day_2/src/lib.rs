@@ -2,9 +2,9 @@ pub mod cubes {
     use std::{cmp::max, error::Error, fs};
 
     struct GameResult {
-        pub red: u32,
-        pub green: u32,
-        pub blue: u32,
+        red: u32,
+        green: u32,
+        blue: u32,
     }
 
     impl GameResult {
