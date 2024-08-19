@@ -104,29 +104,6 @@ pub mod navigation {
         }
 
         Ok(get_lcm(freq))
-
-        // while keep_checking {
-        //     keep_checking = false;
-        //     if directions[num_steps % directions.len()] == 'L' {
-        //         for location in current_locations.iter_mut() {
-        //             *location = mapping.get(location).unwrap().0;
-        //             if location.chars().last().unwrap() != 'Z' {
-        //                 keep_checking = true;
-        //             }
-        //         }
-        //     } else {
-        //         for location in current_locations.iter_mut() {
-        //             *location = mapping.get(location).unwrap().1;
-        //             if location.chars().last().unwrap() != 'Z' {
-        //                 keep_checking = true;
-        //             }
-        //         }
-        //     }
-        //     num_steps += 1;
-        //     if num_steps >= 2 * 15690466351717 {
-        //         println!("We are failing!");
-        //     }
-        // }
     }
 
     fn get_lcm(freq: Vec<usize>) -> u64 {
