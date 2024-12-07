@@ -1,5 +1,5 @@
 pub mod solutions {
-    use std::{collections::HashMap, fs::read_to_string};
+    use std::fs::read_to_string;
 
     pub fn middle_of_correct_update(filename: &String) -> u32 {
         let content = read_to_string(filename).unwrap();
