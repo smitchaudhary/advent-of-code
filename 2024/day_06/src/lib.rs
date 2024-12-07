@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Eq, Hash, PartialEq)]
 enum Direction {
     Up,
     Down,
@@ -105,5 +105,79 @@ pub mod solutions {
         } else {
             return false;
         }
+    }
+
+    pub fn count_loop_positions(filename: &String) -> u32 {
+        //
+        let content = read_to_string(&filename).unwrap();
+
+        let original_grid = content
+            .lines()
+            .map(|line| line.chars().collect::<Vec<char>>())
+            .collect::<Vec<Vec<char>>>();
+
+        let (num_rows, num_cols) = (original_grid.len(), original_grid[0].len());
+        let mut loop_positions: HashSet<(usize, usize)> = HashSet::new();
+
+        let (pos, dirn) = get_starting_state(&original_grid);
+        let (initial_row, initial_col) = pos.unwrap();
+        let initial_dirn = dirn.unwrap();
+
+        for row in 0..num_rows {
+            for col in 0..num_cols {
+                if original_grid[row][col] != '.' || (row, col) == (initial_row, initial_col) {
+                    continue;
+                }
+
+                let mut test_grid = original_grid.clone();
+                test_grid[row][col] = '#';
+
+                if creates_loop(&test_grid, initial_row, initial_col, initial_dirn) {
+                    loop_positions.insert((row, col));
+                }
+            }
+        }
+        loop_positions.len() as u32
+    }
+
+    fn creates_loop(
+        test_grid: &Vec<Vec<char>>,
+        initial_row: usize,
+        initial_col: usize,
+        initial_dirn: Direction,
+    ) -> bool {
+        let (num_rows, num_cols) = (test_grid.len(), test_grid[0].len());
+        let mut visited: HashSet<(usize, usize, Direction)> = HashSet::new();
+
+        let (mut row, mut col) = (initial_row, initial_col);
+        let mut dirn = initial_dirn;
+
+        let mut state = (row, col, dirn);
+        visited.insert(state);
+
+        loop {
+            let (delta_row, delta_col) = dirn.get_delta();
+            let next_row = row as i32 + delta_row;
+            let next_col = col as i32 + delta_col;
+
+            if is_out_of_bounds((num_rows, num_cols), next_row, next_col) {
+                break;
+            }
+
+            if test_grid[next_row as usize][next_col as usize] == '#' {
+                dirn = dirn.turn_right();
+            } else {
+                row = next_row as usize;
+                col = next_col as usize;
+            }
+
+            state = (row, col, dirn);
+
+            if !visited.insert(state) {
+                return true;
+            }
+        }
+
+        false
     }
 }
